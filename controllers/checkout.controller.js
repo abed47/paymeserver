@@ -67,7 +67,7 @@ exports.pingBack = async (req, res) => {
         let transaction = await getTransaction(orderId);
         let product = await getProduct(transaction.product_id);
         await updateTransaction(orderId, {status: 'paid'});
-        await updateUser(transaction.user_id, {balance:product.amount});
+        await updateUser(transaction.user_id, {balance: product.amount});
         
         return successResponse(res, 200, 'updated successfully');
     }catch(err){

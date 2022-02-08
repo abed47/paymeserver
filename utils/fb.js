@@ -12,7 +12,7 @@ exports.getUser = (userId) => {
 exports.updateUser = (userId, data) => {
     return new Promise((resolve, reject) => {
         let fs = getFirestore(fbApp);
-        let d = doc(fs, 'users' + userId);
+        let d = doc(fs, 'users' , userId);
         updateDoc(d, data).then(res => resolve(res)).catch(err => reject(err));
     })
 }
