@@ -42,6 +42,7 @@ exports.success = (req, res) => {
 }
 
 exports.pingBack = (req, res) => {
+    console.log(req.body)
     console.log('hello')
     let html = 'NOK';
     if(gateway.Pingback().validate(req)){
