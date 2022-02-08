@@ -21,7 +21,7 @@ exports.checkout = (req, res) => {
         'merchant_order_id': new Date().getTime().toString() + "A",
         'sign_version': 'v2',
         'success_url': 'http://localhost:3001/checkout/payment/success',
-        'pingback_url': 'https://pavolive.net:3001/checkout/payment/pingback'
+        'pingback_url': 'http://18.158.65.243:3001/checkout/payment/pingback'
     },{
         'autoSubmit': false,
         'hidePayButton': false,
