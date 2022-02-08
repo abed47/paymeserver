@@ -1,7 +1,7 @@
 
 const fasterpay = require('fasterpay-node');
 const dotenv = require('dotenv');
-const { getProduct, createTransaction, updateTransaction, updateUser, getTransaction } = require('../utils/fb');
+const { getProduct, createTransaction, updateTransaction, updateUser, getTransaction, getUser } = require('../utils/fb');
 const { errorResponse, successResponse } = require('../utils/helpers');
 dotenv.config();
 
@@ -66,8 +66,9 @@ exports.pingBack = async (req, res) => {
         let orderId = req.body.payment_order.merchant_order_id;
         let transaction = await getTransaction(orderId);
         let product = await getProduct(transaction.product_id);
+        let user = await getUser(transaction.user_id);
         await updateTransaction(orderId, {status: 'paid'});
-        await updateUser(transaction.user_id, {balance: +product.amount});
+        await updateUser(transaction.user_id, {balance: +product.amount + +user.balance});
         
         return successResponse(res, 200, 'updated successfully');
     }catch(err){
