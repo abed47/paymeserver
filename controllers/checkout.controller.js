@@ -11,7 +11,7 @@ let gateway = new fasterpay.Gateway({
     isTest: 1 // Use 1 for Test Method
 });
 
-exports.checkout = (req, res) => {
+exports.checkout = async (req, res) => {
     try{
 
         let { amount, id, price, userId } = req?.query;
