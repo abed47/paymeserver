@@ -2,12 +2,12 @@
 const { initializeApp } = require("firebase/app");
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDC6hU10GKH1XVxogka1MLInmChtiDt5ec",
-  authDomain: "prodaabespayment.firebaseapp.com",
-  projectId: "prodaabespayment",
-  storageBucket: "prodaabespayment.appspot.com",
-  messagingSenderId: "979758786903",
-  appId: "1:979758786903:web:45c22ad31cc9c1d114f612"
+  apiKey: "AIzaSyA5IXxEo28vMHuZ3eh2MTyJvhA6xj7Flo0",
+  authDomain: "pavolive-5a7dd.firebaseapp.com",
+  projectId: "pavolive-5a7dd",
+  storageBucket: "pavolive-5a7dd.appspot.com",
+  messagingSenderId: "929551388715",
+  appId: "1:929551388715:web:ef50ac001b9d37e74e9a6e"
 };
 
 const app = initializeApp(firebaseConfig);
