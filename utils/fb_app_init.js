@@ -1,3 +1,4 @@
+//TODO: change fb configurations
 const { initializeApp } = require("firebase/app");
 
 const firebaseConfig = {

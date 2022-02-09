@@ -31,6 +31,7 @@ exports.checkout = async (req, res) => {
             'currency': 'USD',
             'merchant_order_id': merchant_order_id,
             'sign_version': 'v2',
+            //TODO: change urls
             'success_url': 'http://localhost:3001/checkout/payment/success',
             'pingback_url': 'http://18.158.65.243:3001/checkout/payment/pingback'
         },{
