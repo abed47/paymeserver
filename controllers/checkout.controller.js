@@ -3,6 +3,8 @@ const fasterpay = require('fasterpay-node');
 const dotenv = require('dotenv');
 const { getProduct, createTransaction, updateTransaction, updateUser, getTransaction, getUser } = require('../utils/fb');
 const { errorResponse, successResponse } = require('../utils/helpers');
+const chance = require('chance');
+
 dotenv.config();
 
 let gateway = new fasterpay.Gateway({
@@ -22,7 +24,7 @@ exports.checkout = async (req, res) => {
         let product = await getProduct(id);
         if(!product?.price) return errorResponse(res, 500, 'product not found');
         //create transaction
-        let merchant_order_id = new Date().getTime().toString() + "A";
+        let merchant_order_id = chance().string({numeric: true, alpha: true, length: 8})
         await createTransaction(merchant_order_id, {user_id: userId, product_id: id, status: 'pending'});
 
         let paymentForm = gateway.PaymentForm().buildForm({
@@ -66,12 +68,11 @@ exports.pingBack = async (req, res) => {
     try{
         let orderId = req.body.payment_order.merchant_order_id;
         let transaction = await getTransaction(orderId);
+        if(!transaction || transaction?.status === "paid") return errorResponse(res, 401, "unauthorized action")
         let product = await getProduct(transaction.product_id);
         let user = await getUser(transaction.user_id);
         await updateTransaction(orderId, {status: 'paid'});
         await updateUser(transaction.user_id, {balance: +product.amount + +user.balance});
-        console.log({balance: +product.amount + +user.balance, amount: product.amount, user: user.balance})
-        
         return successResponse(res, 200, 'updated successfully');
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
