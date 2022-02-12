@@ -3,6 +3,7 @@ const fasterpay = require('fasterpay-node');
 const dotenv = require('dotenv');
 const { getProduct, createTransaction, updateTransaction, updateUser, getTransaction, getUser } = require('../utils/fb');
 const { errorResponse, successResponse } = require('../utils/helpers');
+const { fork } = require('child_process');
 const chance = require('chance');
 
 dotenv.config();
@@ -65,16 +66,11 @@ exports.success = (req, res) => {
 }
 
 exports.pingBack = async (req, res) => {
-    try{
-        let orderId = req.body.payment_order.merchant_order_id;
-        let transaction = await getTransaction(orderId);
-        if(!transaction || transaction?.status === "paid") return errorResponse(res, 401, "unauthorized action")
-        let product = await getProduct(transaction.product_id);
-        let user = await getUser(transaction.user_id);
-        await updateTransaction(orderId, {status: 'paid'});
-        await updateUser(transaction.user_id, {balance: +product.amount + +user.balance});
-        return successResponse(res, 200, 'updated successfully');
-    }catch(err){
-        return errorResponse(res, 500, err?.message || 'server error');
-    }
+    let c = fork('utils/helpers/pingback-handler.js', {detached: true});
+    c.send(JSON.stringify({body: req.body}));
+    c.on('message', () => {
+        res.status(200);
+        res.json({});
+        res.end();
+    })
 }
